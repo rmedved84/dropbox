@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_script_include">
+    <sys_script_include action="INSERT_OR_UPDATE">
+        <access>public</access>
+        <active>true</active>
+        <api_name>x_476139_dropbox.DropboxUtil</api_name>
+        <caller_access/>
+        <client_callable>false</client_callable>
+        <description/>
+        <name>DropboxUtil</name>
+        <script><![CDATA[var DropboxUtil = (function(){	
+	
+	//var instance = gs.getProperty('instance_name') == 'rei2' ? 'prod' : 'dev';	
+	var baseURL = gs.getProperty('x_476139_dropbox.base_endpoint');
+	var refreshToken = gs.getProperty('x_476139_dropbox.refresh_token');
+	var accessToken = _getLocalAccessToken().getValue('token_received');
+	
+	function createFile(body, attachmentID){
+		var request = new sn_ws.RESTMessageV2();
+		request.setHttpMethod('POST');
+		request.setEndpoint('https://content.dropboxapi.com/2/files/upload');
+		request.setRequestHeader('Content-Type', 'application/octet-stream');
+		request.setRequestHeader('Authorization', 'Bearer ' + accessToken);
+		request.setRequestHeader('Dropbox-API-Arg', body);
+		request.setRequestBodyFromAttachment(attachmentID);
+		var response = request.executeAsync();
+		var responseBody = response.getBody();
+		var status = response.getStatusCode();
+		var error = response.getErrorMessage();
+		return responseBody;
+	}
+	
+	function createFolder(path){
+		if(!path){
+			throw "path required";
+		}
+		var body = {
+			"path": path
+		};
+		var responseBody = _callDropbox('2/files/create_folder_v2', 'POST', JSON.stringify(body));
+		return responseBody;
+	}
+	
+	function getFolders(path){
+		path = path || "";
+		var body = {
+			"path": path
+		};
+		var responseBody = _callDropbox('2/files/list_folder', 'POST', JSON.stringify(body));
+		return JSON.parse(responseBody);
+	}
+	
+	/**SNDOC
+	@name getLocalAccessToken
+	@description Get the Saviynt oauth_credential record
+	@parm {String} [refreshToken] - Refresh token to use
+	@returns {GlideRecord} the Saviynt oauth_credential record
+	*/
+	function _getLocalAccessToken(){
+		var now = new GlideDateTime();
+		var oauthGR = new GlideRecord('oauth_credential');
+		oauthGR.addQuery('scopes', 'Dropbox');
+		oauthGR.addQuery('expires', '>', now);
+		oauthGR.query();
+		if(!oauthGR.next()){
+			_deleteExpiredTokens();
+			var newToken = _getAccessToken();
+			return _createNewLocalToken(newToken);
+		}else{
+			return oauthGR;
+		}
+	}
+	
+	/**SNDOC
+	@name deleteExpiredTokens
+	@description Delete any tokens with the Scope Saviynt
+	*/
+	
+	function _deleteExpiredTokens(){
+		var oauthGR = new GlideRecord('oauth_credential');
+		oauthGR.addQuery('scopes', 'Dropbox');
+		oauthGR.deleteMultiple();
+	}
+	
+	
+	/**SNDOC
+	@name createNewLocalToken
+	@description Create a new oauth_credential record with the provided token 
+	@parm {String} [token] - token to use
+	@returns {GlideRecord} the Saviynt oauth_credential record
+	*/
+	function _createNewLocalToken(token){
+		var expiresAt = new GlideDateTime();
+		expiresAt.addSeconds(14400);
+		var oauthGR = new GlideRecord('oauth_credential');
+		oauthGR.initialize();
+		oauthGR.setValue('scopes', 'Dropbox');
+		oauthGR.setValue('token_received', token);
+		oauthGR.setValue('expires', expiresAt);
+		oauthGR.insert();
+		return oauthGR;
+	}
+	
+	/**SNDOC
+	@name getAccessToken
+	@description Get access token from Saviynt using a refresh token
+	@parm {String} [refreshToken] - Refresh token to use
+	@returns {String} Access token
+	*/
+	
+	function _getAccessToken(){
+		var endpoint = baseURL + 'oauth2/token';
+		var requestBody = "grant_type=refresh_token&refresh_token=" + refreshToken; 
+		var request = new sn_ws.RESTMessageV2();
+		request.setEndpoint(endpoint);
+		request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+		request.setRequestHeader('Authorization', 'Basic ZWR2dGkwb3h2cW5jcjNkOmNnaGhva3dqbTh2bnJtdQ==');
+		request.setRequestBody(requestBody);
+		request.setHttpMethod('POST');
+		var response = request.executeAsync();
+		var status = response.getStatusCode();
+		var error = response.getErrorMessage();
+		var responseBody = JSON.parse(response.getBody());
+		return responseBody.access_token || null;
+    }
+	
+	/**SNDOC
+	@name _callDropbox
+	@description Makes a REST call to Saviynt and returns response
+	@param {String} [endpoint] - endpoint to call
+	@param {String} [method] - HTTP method to use
+	@param {Object} [body] - JSON request body to send
+	@returns {String} Access token
+	*/
+	function _callDropbox(endpoint, method, body, headers){
+		var request = new sn_ws.RESTMessageV2();
+		request.setEndpoint(baseURL + endpoint);
+		request.setHttpMethod(method);
+		if(body){
+			request.setRequestBody(body);
+		}
+		request.setRequestHeader('Authorization', 'Bearer ' + accessToken);
+		request.setRequestHeader('Content-Type', 'application/json');
+		if(headers){
+			for(var header in headers){
+				request.setRequestHeader(header, headers[header]);
+			}
+		}
+		var response = request.executeAsync();
+		var requestBody = request.getRequestBody();
+		var statusCode = response.getStatusCode();
+		var error = response.getErrorMessage();
+		var responseBody = response.getBody();
+		if(statusCode.toString().indexOf(2) != 0 || response.haveError()){
+			throw error;
+		}
+		return response.getBody();
+	}
+    	
+	/***** Return public methods here *****/
+	return{
+		'_callDropbox': _callDropbox,
+		'getFolders': getFolders,
+		'createFolder': createFolder,
+		'createFile': createFile
+	};
+	
+})();]]></script>
+        <sys_class_name>sys_script_include</sys_class_name>
+        <sys_created_by>rmedved</sys_created_by>
+        <sys_created_on>2021-07-13 22:18:18</sys_created_on>
+        <sys_id>9257bac687517010009399383cbb35fd</sys_id>
+        <sys_mod_count>30</sys_mod_count>
+        <sys_name>DropboxUtil</sys_name>
+        <sys_package display_value="Dropbox" source="x_476139_dropbox">1c27320a87517010009399383cbb3553</sys_package>
+        <sys_policy>read</sys_policy>
+        <sys_scope display_value="Dropbox">1c27320a87517010009399383cbb3553</sys_scope>
+        <sys_update_name>sys_script_include_9257bac687517010009399383cbb35fd</sys_update_name>
+        <sys_updated_by>rmedved</sys_updated_by>
+        <sys_updated_on>2021-07-16 02:14:30</sys_updated_on>
+    </sys_script_include>
+</record_update>
