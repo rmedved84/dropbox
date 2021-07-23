@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?><database>
-    <element label="Folder" max_length="40" name="x_476139_dropbox_folder" sizeclass="5" type="collection">
+    <element label="Folder" max_length="40" name="x_476139_dropbox_folder" sizeclass="4" type="collection">
         <element label="Dropbox ID" max_length="100" name="dropbox_id" type="string"/>
         <element label="Name" max_length="400" name="name" type="string"/>
         <element label="Parent" max_length="32" name="parent" reference="x_476139_dropbox_folder" type="reference"/>

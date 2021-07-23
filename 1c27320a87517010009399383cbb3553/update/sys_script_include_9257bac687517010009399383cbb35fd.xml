@@ -29,6 +29,18 @@
 		return responseBody;
 	}
 	
+	function move(fromPath, toPath){
+		if(!fromPath || !toPath){
+			throw "missing parameters";
+		}
+		var body = {
+			"from_path": fromPath,
+			"to_path": toPath
+		};
+		var responseBody = _callDropbox('2/files/move_v2', 'POST', JSON.stringify(body));
+		return JSON.parse(responseBody);
+	}
+	
 	function createFolder(path){
 		if(!path){
 			throw "path required";
@@ -37,7 +49,7 @@
 			"path": path
 		};
 		var responseBody = _callDropbox('2/files/create_folder_v2', 'POST', JSON.stringify(body));
-		return responseBody;
+		return JSON.parse(responseBody);
 	}
 	
 	function getFolders(path){
@@ -46,6 +58,17 @@
 			"path": path
 		};
 		var responseBody = _callDropbox('2/files/list_folder', 'POST', JSON.stringify(body));
+		return JSON.parse(responseBody);
+	}
+	
+	function deleteItem(path){
+		if(!path){
+			throw "path required";
+		}
+		var body = {
+			"path": path
+		};
+		var responseBody = _callDropbox('2/files/delete_v2', 'POST', JSON.stringify(body));
 		return JSON.parse(responseBody);
 	}
 	
@@ -114,6 +137,7 @@
 		request.setEndpoint(endpoint);
 		request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 		request.setRequestHeader('Authorization', 'Basic ZWR2dGkwb3h2cW5jcjNkOmNnaGhva3dqbTh2bnJtdQ==');
+		//request.setAuthenticationProfile('1b83488987213010009399383cbb358c');
 		request.setRequestBody(requestBody);
 		request.setHttpMethod('POST');
 		var response = request.executeAsync();
@@ -161,7 +185,8 @@
 		'_callDropbox': _callDropbox,
 		'getFolders': getFolders,
 		'createFolder': createFolder,
-		'createFile': createFile
+		'createFile': createFile,
+		'move': move
 	};
 	
 })();]]></script>
@@ -169,13 +194,13 @@
         <sys_created_by>rmedved</sys_created_by>
         <sys_created_on>2021-07-13 22:18:18</sys_created_on>
         <sys_id>9257bac687517010009399383cbb35fd</sys_id>
-        <sys_mod_count>30</sys_mod_count>
+        <sys_mod_count>35</sys_mod_count>
         <sys_name>DropboxUtil</sys_name>
         <sys_package display_value="Dropbox" source="x_476139_dropbox">1c27320a87517010009399383cbb3553</sys_package>
         <sys_policy>read</sys_policy>
         <sys_scope display_value="Dropbox">1c27320a87517010009399383cbb3553</sys_scope>
         <sys_update_name>sys_script_include_9257bac687517010009399383cbb35fd</sys_update_name>
         <sys_updated_by>rmedved</sys_updated_by>
-        <sys_updated_on>2021-07-16 02:14:30</sys_updated_on>
+        <sys_updated_on>2021-07-23 21:19:28</sys_updated_on>
     </sys_script_include>
 </record_update>

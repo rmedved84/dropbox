@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_auth_profile_basic">
+    <sys_auth_profile_basic action="INSERT_OR_UPDATE">
+        <name>Dropbox</name>
+        <password>5o2Dozucug3BqH5movJlqw==</password>
+        <sys_class_name>sys_auth_profile_basic</sys_class_name>
+        <sys_created_by>rmedved</sys_created_by>
+        <sys_created_on>2021-07-22 15:56:26</sys_created_on>
+        <sys_id>1b83488987213010009399383cbb358c</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Dropbox</sys_name>
+        <sys_package display_value="Dropbox" source="x_476139_dropbox">1c27320a87517010009399383cbb3553</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Dropbox">1c27320a87517010009399383cbb3553</sys_scope>
+        <sys_update_name>sys_auth_profile_basic_1b83488987213010009399383cbb358c</sys_update_name>
+        <sys_updated_by>rmedved</sys_updated_by>
+        <sys_updated_on>2021-07-22 15:56:26</sys_updated_on>
+        <username>edvti0oxvqncr3d</username>
+    </sys_auth_profile_basic>
+</record_update>
