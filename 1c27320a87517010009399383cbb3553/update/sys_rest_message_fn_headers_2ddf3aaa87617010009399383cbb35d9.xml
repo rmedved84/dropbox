@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_rest_message_fn_headers">
+    <sys_rest_message_fn_headers action="INSERT_OR_UPDATE">
+        <name>Content-Type</name>
+        <rest_message_function display_value="POST">9baf6a6e87217010009399383cbb355e</rest_message_function>
+        <sys_class_name>sys_rest_message_fn_headers</sys_class_name>
+        <sys_created_by>rmedved</sys_created_by>
+        <sys_created_on>2021-07-27 21:36:21</sys_created_on>
+        <sys_id>2ddf3aaa87617010009399383cbb35d9</sys_id>
+        <sys_mod_count>1</sys_mod_count>
+        <sys_name>Content-Type</sys_name>
+        <sys_package display_value="Dropbox" source="x_476139_dropbox">1c27320a87517010009399383cbb3553</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Dropbox">1c27320a87517010009399383cbb3553</sys_scope>
+        <sys_update_name>sys_rest_message_fn_headers_2ddf3aaa87617010009399383cbb35d9</sys_update_name>
+        <sys_updated_by>rmedved</sys_updated_by>
+        <sys_updated_on>2021-07-27 21:37:10</sys_updated_on>
+        <value>application/json</value>
+    </sys_rest_message_fn_headers>
+</record_update>
