@@ -31,7 +31,7 @@
 
 	try{
 		var folder = DropboxUtil.createFolder('/' + current.getValue('name'));
-		folder = JSON.parse(folder);
+		//folder = JSON.parse(folder);
 		folder = folder.metadata;
 		current.setValue('path', folder.path_lower);
 		current.setValue('dropbox_id', folder.id);
@@ -46,7 +46,7 @@
         <sys_domain>global</sys_domain>
         <sys_domain_path>/</sys_domain_path>
         <sys_id>20da453a87917010009399383cbb3579</sys_id>
-        <sys_mod_count>0</sys_mod_count>
+        <sys_mod_count>1</sys_mod_count>
         <sys_name>Create Folder In Dropbox</sys_name>
         <sys_overrides/>
         <sys_package display_value="Dropbox" source="x_476139_dropbox">1c27320a87517010009399383cbb3553</sys_package>
@@ -54,7 +54,7 @@
         <sys_scope display_value="Dropbox">1c27320a87517010009399383cbb3553</sys_scope>
         <sys_update_name>sys_script_20da453a87917010009399383cbb3579</sys_update_name>
         <sys_updated_by>rmedved</sys_updated_by>
-        <sys_updated_on>2021-07-15 21:36:25</sys_updated_on>
+        <sys_updated_on>2021-08-02 23:06:21</sys_updated_on>
         <template/>
         <when>before</when>
     </sys_script>
